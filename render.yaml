@@ -1,0 +1,33 @@
+services:
+  - type: web
+    name: planealo-app
+    runtime: php
+    plan: free
+    rootDirectory: backend/web
+    buildCommand: |
+      composer install --no-dev --optimize-autoloader
+      php yii migrate --interactive=0
+    startCommand: php -S 0.0.0.0:$PORT -t backend/web
+    envVars:
+      - key: YII_ENV
+        value: prod
+      - key: YII_DEBUG
+        value: "false"
+      - key: DB_DSN
+        fromDatabase:
+          name: planealo-db
+          property: connectionString
+      - key: DB_USER
+        fromDatabase:
+          name: planealo-db
+          property: user
+      - key: DB_PASS
+        fromDatabase:
+          name: planealo-db
+          property: password
+
+  - type: pgsql
+    name: planealo-db
+    plan: free
+    databaseName: planealo
+    ipAllowList: []

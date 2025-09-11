@@ -1,0 +1,163 @@
+<?php
+
+/** @var yii\web\View $this */
+/** @var string $content */
+
+use app\assets\AppAsset;
+use app\widgets\Alert;
+use yii\bootstrap5\Breadcrumbs;
+use yii\bootstrap5\Html;
+use yii\bootstrap5\Nav;
+use yii\bootstrap5\NavBar;
+
+AppAsset::register($this);
+//Select2 configuration
+\app\assets\Select2BootstrapAsset::register($this);
+\app\assets\Select2LoadAsset::register($this);
+
+$this->registerCsrfMetaTags();
+$this->registerMetaTag(['charset' => Yii::$app->charset], 'charset');
+$this->registerMetaTag(['name' => 'viewport', 'content' => 'width=device-width, initial-scale=1, shrink-to-fit=no']);
+$this->registerMetaTag(['name' => 'description', 'content' => $this->params['meta_description'] ?? '']);
+$this->registerMetaTag(['name' => 'keywords', 'content' => $this->params['meta_keywords'] ?? '']);
+$this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii::getAlias('@web/favicon.ico')]);
+?>
+<?php $this->beginPage() ?>
+<!DOCTYPE html>
+<html lang="<?= Yii::$app->language ?>" class="h-100">
+<head>
+    <title><?= Html::encode($this->title) ?></title>
+    <?php $this->head() ?>
+</head>
+<body class="d-flex flex-column h-100">
+<?php $this->beginBody() ?>
+
+<header id="header">
+    <?php
+        NavBar::begin
+            ([
+                'brandLabel' => '<img src='.Yii::getAlias("@web").'/img/logos/logoGed.png class="d-block img-logo" alt="..."> GED',
+                'brandUrl' => Yii::$app->homeUrl,
+                'options' => ['class' => 'navbar navbar-expand-lg navbar-dark bg-dark']
+            ]);
+            echo Nav::widget([
+                'encodeLabels' => true, //Permite el uso de  html in Etiquetas
+                'options' => ['class' => 'navbar-nav'],
+                'items' => [
+                    ['label' => 'inicio', 'url' => ['/site/index']],
+                    ['label' => 'Registros',
+                    'items' => [
+                            ['label' => 'Escuela', 'url' => ['/escuela_club/escuela-registro/create']],
+                            ['label' => 'Atletas', 'url' => ['/atletas/atletas-registro/create']],
+                        ],
+                    ],
+                    ['label' => 'G.E.D',
+                        'items' => [
+                            ['label' => 'Escuelas Registradas', 'url' => ['/#escuelas']],
+                            ['label' => 'Acerca de...', 'url' => ['/#Acerca_de']],
+                            ['label' => 'Contact', 'url' => ['/site/contact']],
+                        ],
+                    ],
+                    Yii::$app->user->isGuest
+                        ? ['label' => 'Login', 'url' => ['/site/login']]
+                        : '<li class="nav-item">'
+                            . Html::beginForm(['/site/logout'])
+                            . Html::submitButton(
+                                'Logout (' . Yii::$app->user->identity->username . ')',
+                                ['class' => 'nav-link btn btn-link logout']
+                            )
+                            . Html::endForm()
+                            . '</li>'
+                ]
+            ]);
+        ?> <!--Parada temporal del PHP para introducir codigo html-->
+        <form class='navbar-form navbar-right' role='search'>
+            <div  class="panel-redes-sociales">
+                <div id="icons-redes-sociales"class="social-links">
+                    <h1 >Redes Sociales</h1>
+                    <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+                    <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+                    <a href="@lacasadelastogasccs" class="instagram"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                </div>
+            </div>
+        </form>
+        <?php 
+            echo "," ;
+        ?>
+        <form class='navbar-form navbar-right' role='search'>
+            <div  class="panel-Noticias">
+                <h1>Noticias</h1> 
+                <div id="carrusel-nav" class="col-md-10">
+                    <div id="carouselNav" class="carousel slide carousel-fade" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#carouselNav" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                            <button type="button" data-bs-target="#carouselNav" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                            <button type="button" data-bs-target="#carouselNav" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                        </div>
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src=<?='"'.Yii::getAlias('@web').'/img/nav_carousel/categorias.png'.'"'?> class="d-block w-100" alt="...">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <!--<p>Categorias</p>
+                                    <p>Entrenamiento, tecnica, agilidad en este disciplina</p>-->
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <img src=<?='"'.Yii::getAlias('@web').'/img/nav_carousel/JuegosDistritales_Entrenar.png'.'"'?> class="d-block w-100" alt="...">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <!--<h5>Escuela de Basketbol</h5>
+                                    <p>Entrenamiento, tecnica, agilidad en este disciplina</p>-->
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <img src=<?='"'.Yii::getAlias('@web').'/img/nav_carousel/imgMotiva.png'.'"'?> class="d-block w-100" alt="...">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <!--<h5>Escuela de Futbol</h5>
+                                    <p>Entrenamiento, tecnica, agilidad en este disciplina</p>-->
+                                </div>
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselNav" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Anterior</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselNav" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Siguiente</span>
+                        </button>
+                    </div>
+                </div>    
+            </div>
+        </form>
+        <?php 
+            echo "," ;
+        ?>
+        <?php 
+        NavBar::end();
+    ?>
+</header>
+
+<main id="main" class="flex-shrink-0" role="main">
+    <div class="container">
+        <?php if (!empty($this->params['breadcrumbs'])): ?>
+            <?= Breadcrumbs::widget(['links' => $this->params['breadcrumbs']]) ?>
+        <?php endif ?>
+        <?= Alert::widget() ?>
+        <?= $content ?>
+    </div>
+</main>
+
+<footer id="footer" class="mt-auto py-3 bg-light">
+    <div class="container">
+        <div class="row text-muted">
+            <div class="col-md-6 text-center text-md-start">&copy; My Company <?= date('Y') ?></div>
+            <div class="col-md-6 text-center text-md-end"><?= Yii::powered() ?></div>
+        </div>
+    </div>
+</footer>
+
+<?php $this->endBody() ?>
+</body>
+</html>
+<?php $this->endPage() ?>
