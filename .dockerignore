@@ -1,0 +1,7 @@
+.git/
+vendor/
+runtime/
+web/assets/
+.env
+Dockerfile
+.dockerignore
