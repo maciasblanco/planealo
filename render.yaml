@@ -3,11 +3,11 @@ services:
     name: planealo-app
     runtime: php
     plan: free
-    rootDirectory: backend/web
+    rootDirectory: web  # Cambiado a 'web' para Yii2 Basic
     buildCommand: |
       composer install --no-dev --optimize-autoloader
       php yii migrate --interactive=0
-    startCommand: php -S 0.0.0.0:$PORT -t backend/web
+    startCommand: php -S 0.0.0.0:$PORT -t web  # Sirve desde 'web'
     envVars:
       - key: YII_ENV
         value: prod
