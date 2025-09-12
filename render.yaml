@@ -1,0 +1,22 @@
+# render.yaml
+services:
+  - type: web
+    name: planealo-web
+    env: php
+    plan: free
+    buildCommand: |
+      composer install --no-dev --optimize-autoloader
+      php init --env=Production --overwrite=All
+    startCommand: php -S 0.0.0.0:$PORT -t web
+    envVars:
+      - key: YII_ENV
+        value: production
+      - key: YII_DEBUG
+        value: false
+
+  - type: pgsql
+    name: planealo-db
+    plan: free
+    ipAllowList: []
+    databaseName: planealo
+    user: planealo_user
