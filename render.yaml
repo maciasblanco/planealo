@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 services:
   - type: web
     name: planealo-app
@@ -25,9 +26,32 @@ services:
         fromDatabase:
           name: planealo-db
           property: password
+=======
+# render.yaml
+services:
+  - type: web
+    name: planealo-web
+    env: php
+    plan: free
+    buildCommand: |
+      composer install --no-dev --optimize-autoloader
+      php init --env=Production --overwrite=All
+    startCommand: php -S 0.0.0.0:$PORT -t web
+    envVars:
+      - key: YII_ENV
+        value: production
+      - key: YII_DEBUG
+        value: false
+>>>>>>> origin/mjbv-oficina
 
   - type: pgsql
     name: planealo-db
     plan: free
+<<<<<<< HEAD
     databaseName: planealo
     ipAllowList: []
+=======
+    ipAllowList: []
+    databaseName: planealo
+    user: planealo_user
+>>>>>>> origin/mjbv-oficina

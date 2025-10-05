@@ -13,7 +13,11 @@ nbproject
 Thumbs.db
 
 # composer vendor dir
+<<<<<<< HEAD
 vendor/
+=======
+/vendor
+>>>>>>> origin/mjbv-oficina
 
 # composer itself is not needed
 composer.phar

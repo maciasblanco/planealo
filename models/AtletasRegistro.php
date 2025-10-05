@@ -72,9 +72,12 @@ class AtletasRegistro extends \yii\db\ActiveRecord
             [['estatura', 'peso'], 'number'],
             [['asma', 'eliminado'], 'boolean'],
             [['identificacion_representante','id_nac_representante','id_nac', 'identificacion', 'sexo','nombreEscuelaClub','telf_representante','cell_representante','s_apellido_representante','p_apellido_representante','p_nombre_representante','s_nombre_representante','p_nombre', 's_nombre', 'p_apellido', 's_apellido', 'talla_franela', 'talla_short', 'cell', 'telf', 'fn','estatura'], 'required'],
+<<<<<<< HEAD
         // Validación personalizada para evitar duplicados de identificación
             ['identificacion', 'uniqueCombo', 'params' => ['id_nac']],
             [['identificacion'], 'uniqueCombo', 'skipOnError' => false],
+=======
+>>>>>>> origin/mjbv-oficina
         
             [['id_escuela'], 'exist', 'skipOnError' => true, 'targetClass' => Escuela::className(), 'targetAttribute' => ['id_escuela' => 'id']],
         
@@ -118,6 +121,7 @@ class AtletasRegistro extends \yii\db\ActiveRecord
         ];
     }
 
+<<<<<<< HEAD
 
     /**
      * Validación personalizada para verificar la combinación única de id_nac e identificacion
@@ -160,6 +164,8 @@ class AtletasRegistro extends \yii\db\ActiveRecord
             $this->addError('identificacion', 'La combinación ya existe.');
         }
     }
+=======
+>>>>>>> origin/mjbv-oficina
     public function getEscuela()
     {
         return $this->hasOne(Escuela::className(), ['id' => 'id_escuela']);

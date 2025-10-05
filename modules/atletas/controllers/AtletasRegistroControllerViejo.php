@@ -62,34 +62,7 @@ class AtletasRegistroController extends Controller
             'nombre' => $nombre,
         ]);
     }
-<<<<<<< HEAD
 
-=======
-    public function actionIndexDefault($id=null, $nombre=null)
-    {
-        $registro_atletas = AtletasRegistro::find()->exists();
-        
-        if (!$registro_atletas) {
-            // No hay registros de atletas en absoluto
-            Yii::$app->session->setFlash('info', 'No hay atletas registrados en el sistema.');
-        }
-    
-        $searchModel = new AtletasRegistroSearch();
-        
-        // Pasar el id de la escuela al searchModel para filtrar
-        $searchModel->id_escuela = $id;
-        
-        $dataProvider = $searchModel->search($this->request->queryParams);
-        
-        $this->layout = 'escuelas'; 
-        return $this->render('index-default', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            'id' => $id, 
-            'nombre' => $nombre,
-        ]);
-    }
->>>>>>> origin/mjbv-oficina
     /**
      * Displays a single AtletasRegistro model.
      * @param int $id ID

@@ -21,12 +21,16 @@ use yii\widgets\ActiveForm;
                 <h2>Registro Atletas</h2>
             </div> 
         </div>
+<<<<<<< HEAD
         <?php $form = ActiveForm::begin([
                     'enableAjaxValidation' => true,
                     'validateOnBlur' => true,
                     'validateOnChange' => true,
                 ]); ?> 
 
+=======
+        <?php $form = ActiveForm::begin(); ?> 
+>>>>>>> origin/mjbv-oficina
             <div id="form-ingresoAtleta" class="row">
                 <div class="col-md-4 animated">
                     <img src=<?='"'.Yii::getAlias('@web').'/img/escuela/voleibol/img/voleibol1.jpg'.'"'?> class="img-registro"alt="..."> 
@@ -97,10 +101,14 @@ use yii\widgets\ActiveForm;
                                 ])->label('Nac.'); ?>
                             </div>
                             <div class="col-md-3">
+<<<<<<< HEAD
                                 <?= $form->field($model, 'identificacion')->textInput([
                                     'maxlength' => true,
                                     'placeholder' => 'Ingrese el número de identificación',
                                 ])->label('Cédula') ?>
+=======
+                                <?= $form->field($model, 'identificacion')->textInput()->label('Cédula') ?>
+>>>>>>> origin/mjbv-oficina
                             </div>
                             <div class="col-md-3">
                                 <?= $form->field($model, 'fn')->textInput([

@@ -7,6 +7,10 @@ use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/mjbv-oficina
 /** @var yii\web\View $this */
 /** @var app\modules\atletas\models\AtletasRegistroSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
