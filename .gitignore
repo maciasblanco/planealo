@@ -37,3 +37,4 @@ tests/_support/_generated
 /config/db_*.php
 /.env
 /vagrant/config/vagrant-local.yml
+/config/test_db.php
