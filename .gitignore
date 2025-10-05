@@ -33,4 +33,7 @@ tests/_output/*
 tests/_support/_generated
 
 #vagrant folder
-/.vagrant
+/.vagrant/config/db.php
+/config/db_*.php
+/.env
+/vagrant/config/vagrant-local.yml
