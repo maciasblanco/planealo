@@ -1,0 +1,9 @@
+<?php
+// config/db.php.example (subir esta versión)
+return [
+    'class' => 'yii\db\Connection',
+    'dsn' => 'mysql:host=localhost;dbname=planealo',
+    'username' => 'TU_USUARIO',
+    'password' => 'TU_CONTRASEÑA', // <-- Usar variables de entorno
+    'charset' => 'utf8',
+];
