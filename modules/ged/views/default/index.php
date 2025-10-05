@@ -1,19 +1,11 @@
 <?php
 
 use yii\helpers\Html;
-<<<<<<< HEAD
-=======
-use app\widgets\HorizontalMenu;
->>>>>>> origin/mjbv-oficina
 
 /** @var yii\web\View $this */
 
 $this->title = 'Gestión Escuelas Deportivas';
 ?>
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/mjbv-oficina
 <div class="site-index">
     <section id="Carrusel-Promocional">
         <div class="row">
@@ -41,18 +33,6 @@ $this->title = 'Gestión Escuelas Deportivas';
                     </div> 
                 </div>
             </div>
-<<<<<<< HEAD
-=======
-           <!-- <div  class="registro-escuela">
-                <h1>NUEVO CODIGO PARA LA CLAVE GENERICA</h1>
-                <?php    
-                    // Generar el hash
-                   
-                   // $hash = Yii::$app->security->generatePasswordHash('123456');
-                   // echo $hash; // Copia este valor
-                ?>
-            </div>-->
->>>>>>> origin/mjbv-oficina
             <div id="carrusel-principal" class="col-md-8">
                 <div id="carouselIndexGed" class="carousel slide carousel-fade" data-bs-ride="carousel">
                     <div class="carousel-indicators">
@@ -104,13 +84,7 @@ $this->title = 'Gestión Escuelas Deportivas';
             <?php
                 foreach ($datosEscuelas as $data){ ?>
                 <div class="card col-md-4">
-<<<<<<< HEAD
                     <a href=<?='"'.Yii::getAlias('@web').'/ged?id='.$data['id'].'& nombre='.$data['nombre'].'"'?>><img src=<?='"'.Yii::getAlias('@web').'/img/logos/escuelas/logo'.$data['id'].'.png'.'"'?> class="card-img-top" alt="voleibol"></a>
-=======
-                <!--<a href=<?='"'.Yii::getAlias('@web').'/ged?id='.$data['id'].'& nombre='.$data['nombre'].'"'?>><img src=<?='"'.Yii::getAlias('@web').'/img/logos/escuelas/logo'.$data['id'].'.png'.'"'?> class="card-img-top" alt="voleibol"></a>-->
-                    <a href=<?='"'.Yii::getAlias('@web').'/index.php?r=atletas/atletas-registro/index-default&id='.$data['id'].'& nombre='.$data['nombre'].'"'?>><img src=<?='"'.Yii::getAlias('@web').'/img/logos/escuelas/logo'.$data['id'].'.png'.'"'?> class="card-img-top" alt="voleibol"></a>
-                   
->>>>>>> origin/mjbv-oficina
                     <div class="card-body">
                         <h5 class="card-title"><?=$data['nombre'] ?></h5>
                         <p class="card-text">Enseñanza de los fundamentos básicos del Voleibol, Basketbol, Futbol, posicionamiento en cancha y tactica de juego para cada deporte </p>

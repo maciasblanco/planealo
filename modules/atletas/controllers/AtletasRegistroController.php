@@ -38,23 +38,11 @@ class AtletasRegistroController extends Controller
      *
      * @return string
      */
-    public function actionIndex($id=null, $nombre=null)
+    public function actionIndex($id=0, $nombre=null)
     {
-        $registro_atletas = AtletasRegistro::find()->exists();
-        
-        if (!$registro_atletas) {
-            // No hay registros de atletas en absoluto
-            Yii::$app->session->setFlash('info', 'No hay atletas registrados en el sistema.');
-        }
-    
         $searchModel = new AtletasRegistroSearch();
-        
-        // Pasar el id de la escuela al searchModel para filtrar
-        $searchModel->id_escuela = $id;
-        
         $dataProvider = $searchModel->search($this->request->queryParams);
-        
-        $this->layout = 'escuelas'; 
+        $this ->layout='escuelas'; 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -62,34 +50,7 @@ class AtletasRegistroController extends Controller
             'nombre' => $nombre,
         ]);
     }
-<<<<<<< HEAD
 
-=======
-    public function actionIndexDefault($id=null, $nombre=null)
-    {
-        $registro_atletas = AtletasRegistro::find()->exists();
-        
-        if (!$registro_atletas) {
-            // No hay registros de atletas en absoluto
-            Yii::$app->session->setFlash('info', 'No hay atletas registrados en el sistema.');
-        }
-    
-        $searchModel = new AtletasRegistroSearch();
-        
-        // Pasar el id de la escuela al searchModel para filtrar
-        $searchModel->id_escuela = $id;
-        
-        $dataProvider = $searchModel->search($this->request->queryParams);
-        
-        $this->layout = 'escuelas'; 
-        return $this->render('index-default', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            'id' => $id, 
-            'nombre' => $nombre,
-        ]);
-    }
->>>>>>> origin/mjbv-oficina
     /**
      * Displays a single AtletasRegistro model.
      * @param int $id ID
@@ -108,7 +69,7 @@ class AtletasRegistroController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
-    public function actionCreate($id, $nombre)
+    public function actionCreate($id=null, $nombre=null)
     {
         $model = new AtletasRegistro();
         /*Selecciono el main a usar*/

@@ -36,7 +36,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     <?php
         NavBar::begin
             ([
-                'brandLabel' => '<img src='.Yii::getAlias("@web").'/img/logos/logoGed.png class="d-block img-logo" alt="..."> GED',
+                'brandLabel' => '<img src='.Yii::getAlias("@web").'/img/logos/logoGed.png class="d-block img-logo" alt="...">',
                 'brandUrl' => Yii::$app->homeUrl,
                 'options' => ['class' => 'navbar navbar-expand-lg navbar-dark bg-dark']
             ]);

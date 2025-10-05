@@ -72,15 +72,6 @@ class AtletasRegistro extends \yii\db\ActiveRecord
             [['estatura', 'peso'], 'number'],
             [['asma', 'eliminado'], 'boolean'],
             [['identificacion_representante','id_nac_representante','id_nac', 'identificacion', 'sexo','nombreEscuelaClub','telf_representante','cell_representante','s_apellido_representante','p_apellido_representante','p_nombre_representante','s_nombre_representante','p_nombre', 's_nombre', 'p_apellido', 's_apellido', 'talla_franela', 'talla_short', 'cell', 'telf', 'fn','estatura'], 'required'],
-<<<<<<< HEAD
-        // Validación personalizada para evitar duplicados de identificación
-            ['identificacion', 'uniqueCombo', 'params' => ['id_nac']],
-            [['identificacion'], 'uniqueCombo', 'skipOnError' => false],
-=======
->>>>>>> origin/mjbv-oficina
-        
-            [['id_escuela'], 'exist', 'skipOnError' => true, 'targetClass' => Escuela::className(), 'targetAttribute' => ['id_escuela' => 'id']],
-        
         ];
     }
 
@@ -119,55 +110,5 @@ class AtletasRegistro extends \yii\db\ActiveRecord
             'eliminado' => 'Eliminado',
             'dir_ip' => 'Dir Ip',
         ];
-    }
-
-<<<<<<< HEAD
-
-    /**
-     * Validación personalizada para verificar la combinación única de id_nac e identificacion
-     */
-    public function uniqueCombo($attribute, $params, $validator)
-    {
-        // Verificar que los valores no sean nulos
-        if (empty($this->id_nac)) {
-            $this->addError('id_nac', 'El tipo de identificación es requerido.');
-            return;
-        }
-        
-        if (empty($this->identificacion)) {
-            $this->addError($attribute, 'El número de identificación es requerido.');
-            return;
-        }
-
-        // Convertir a los tipos correctos
-        $id_nac = (int)$this->id_nac;
-        $identificacion = (string)$this->identificacion; // Usar string para mantener ceros iniciales si los hay
-
-        // Construir la consulta
-        $query = self::find()
-            ->where(['id_nac' => $id_nac])
-            ->andWhere(['identificacion' => $identificacion]);
-
-        // Excluir el registro actual si estamos actualizando
-        if (!$this->isNewRecord && $this->id) {
-            $query->andWhere(['!=', 'id', (int)$this->id]);
-        }
-
-        // Ejecutar la consulta
-        $existingRecord = $query->one();
-        die(var_dump($existingRecord));
-        // Para depuración (registra la consulta SQL en los logs)
-        Yii::info("Consulta de validación: " . $query->createCommand()->rawSql, 'application');
-
-        if ($existingRecord !== null) {
-            $this->addError('id_nac', ' '); // Forzar que se marque en rojo
-            $this->addError('identificacion', 'La combinación ya existe.');
-        }
-    }
-=======
->>>>>>> origin/mjbv-oficina
-    public function getEscuela()
-    {
-        return $this->hasOne(Escuela::className(), ['id' => 'id_escuela']);
     }
 }

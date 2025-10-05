@@ -1,16 +1,11 @@
 <?php
-use app\models\Escuela;
+
 use app\models\AtletasRegistro;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/mjbv-oficina
 /** @var yii\web\View $this */
 /** @var app\modules\atletas\models\AtletasRegistroSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
@@ -23,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <center><h1><?= Html::encode($this->title).'</br>'.$nombre?></h1></center>
 
         <p>
-            <a href=<?='"'.Yii::getAlias('@web').'?r=atletas/atletas-registro/create&id='.$id.'&nombre='.$nombre.'"'?> class = "btn btn-success">Regitrar Atleta</a>
+            <?= Html::a('Registrar  Atletas ', ['create?id='.$id.'& nombre='.$nombre], ['class' => 'btn btn-success']) ?>
         </p>
 
         <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -36,19 +31,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 //'id',
                 //'id_club',
-                //'id_escuela',
-                [
-                    'attribute' => 'id_escuela',
-                    'label'=>"Escuela",
-                    'filter' => ArrayHelper::map(AtletasRegistro::find()->all(), 'id', 'id'),
-                    'value' => function ($model) {
-                        return $model->escuela->nombre;
-                    },
-                ],
+                'id_escuela',
                 //'id_representante',
-                //'id_alergias',
-                //'id_enfermedades',
-                //'id_discapacidad',
+                'id_alergias',
+                'id_enfermedades',
+                'id_discapacidad',
                 'identificacion',
                 'p_nombre',
                 //'s_nombre',
@@ -58,10 +45,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 //'fn',
                 'sexo',
                 'estatura',
-                //'peso',
-                //'talla_franela',
-                //'talla_short',
-                //'cell',
+                'peso',
+                'talla_franela',
+                'talla_short',
+                'cell',
                 'telf',
                 //'asma:boolean',
                 'd_creacion',

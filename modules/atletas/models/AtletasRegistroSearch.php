@@ -57,10 +57,6 @@ class AtletasRegistroSearch extends AtletasRegistro
             // $query->where('0=1');
             return $dataProvider;
         }
-        // Filtrar por escuela_id si está definido
-            if ($this->id_escuela !== null) {
-                $query->andWhere(['id_escuela' => $this->id_escuela]);
-            }
 
         // grid filtering conditions
         $query->andFilterWhere([

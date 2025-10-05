@@ -75,8 +75,4 @@ class Escuela extends \yii\db\ActiveRecord
             'dir_ip' => 'Dir Ip',
         ];
     }
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-
 }

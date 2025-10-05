@@ -9,10 +9,6 @@ use yii\bootstrap5\Breadcrumbs;
 use yii\bootstrap5\Html;
 use yii\bootstrap5\Nav;
 use yii\bootstrap5\NavBar;
-<<<<<<< HEAD
-=======
-use app\widgets\HorizontalMenu;
->>>>>>> origin/mjbv-oficina
 
 AppAsset::register($this);
 
@@ -32,7 +28,6 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 </head>
 <body class="d-flex flex-column h-100">
 <?php $this->beginBody() ?>
-<<<<<<< HEAD
 
 <header id="header">
     <?php
@@ -136,14 +131,6 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         ?>
         <?php 
         NavBar::end();
-=======
-<h1>Este es el menue creado horizontalmente por Ia</h1>
-<?= HorizontalMenu::widget() ?>
-
-<header id="header">
-    <?php
-       HorizontalMenu::widget();
->>>>>>> origin/mjbv-oficina
     ?>
 </header>
 

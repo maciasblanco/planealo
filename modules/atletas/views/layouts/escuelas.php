@@ -9,10 +9,6 @@ use yii\bootstrap5\Breadcrumbs;
 use yii\bootstrap5\Html;
 use yii\bootstrap5\Nav;
 use yii\bootstrap5\NavBar;
-<<<<<<< HEAD
-=======
-use app\widgets\HorizontalMenu;
->>>>>>> origin/mjbv-oficina
 
 AppAsset::register($this);
 //Select2 configuration
@@ -39,20 +35,12 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 <?php $this->beginBody() ?>
 <header id="header">
     <!--Seleccionar Imagen del  y fondos del Banner de cada escuela-->
-<<<<<<< HEAD
 
     <?php
-        
-        
-        
-=======
-    <?= HorizontalMenu::widget() ?>
-    <?php
->>>>>>> origin/mjbv-oficina
         /*Selecciono el valor de la escuela por el metodo get*/
         $codeEscuela=(int)$_GET['id'];
         $codeNombreEscuela=$_GET['nombre'];
-        //die(var_dump($id));
+        //die(var_dump($codeEscuela));
         $dirLogo='/img/logos/escuelas/logo'.$codeEscuela.'.png class="d-block img-logo" alt="...">';
     NavBar::begin([
         'brandLabel' => '<img src='.Yii::getAlias("@web").$dirLogo,
@@ -69,9 +57,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                 'items' => [
                         //['label' => 'Escuela', 'url' => ['/escuela_club/escuela-registro/create']],
                         //['label' => 'Club', 'url' => ['/escuela_club/escuela-registro/create']],
-                        ['label' => 'Atletas', 
-                        'url' => ['/atletas/atletas-registro/index', 'id' => $codeEscuela, 'nombre' => $codeNombreEscuela]],
-                    
+                        ['label' => 'Atletas', 'url' => ['/atletas/atletas-registro/index?id='.$codeEscuela.'& nombre='.$codeNombreEscuela]],
                     ],
                 ],
                 ['label' => 'G.E.D',

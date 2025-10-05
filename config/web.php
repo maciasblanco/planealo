@@ -2,11 +2,6 @@
 
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
-<<<<<<< HEAD
-=======
-$db_saime = require __DIR__ . '/db_saime.php';
-$db_cne = require __DIR__ . '/db_cne.php';
->>>>>>> origin/mjbv-oficina
 
 $config = [
     'id' => 'GED',
@@ -34,16 +29,6 @@ $config = [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
         ],
-<<<<<<< HEAD
-=======
-        'authManager' => [
-            'class' => 'yii\rbac\DbManager',
-            'itemTable' => 'seguridad.auth_item',
-            'itemChildTable' => 'seguridad.auth_item_child',
-            'assignmentTable' => 'seguridad.auth_assignment',
-            'ruleTable' => 'seguridad.auth_rule',
-        ],
->>>>>>> origin/mjbv-oficina
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
@@ -63,11 +48,6 @@ $config = [
             ],
         ],
         'db' => $db,
-<<<<<<< HEAD
-=======
-        'db_saime' => $db_saime,
-        'db_cne' => $db_cne,
->>>>>>> origin/mjbv-oficina
         'urlManager' => [
             'enablePrettyUrl' => false,
             'showScriptName' => false,
@@ -81,7 +61,6 @@ $config = [
                         'position' => \yii\web\View::POS_HEAD
                     ],
                 ],
-<<<<<<< HEAD
                 /*'dmstr\web\AdminLteAsset' => [
                 'skin' => 'skin-black',
                 ], */   
@@ -89,28 +68,6 @@ $config = [
         ],
     ],
     'modules' => [
-=======
-                'dmstr\web\AdminLteAsset' => [
-                'skin' => 'skin-black',
-                ],    
-            ],
-        ],
-        'i18n' => [
-            'translations' => [
-                '*' => [
-                    'class' => 'yii\i18n\PhpMessageSource',
-                ],
-            ],
-        ]
-    ],
-    'modules' => [
-        //rbac security
-        'admin' => [
-            'class' => 'mdm\admin\Module',
-            //'layout' => 'left-menu',
-            //'mainLayout' => '@app/views/layouts/mainAdminlte.php',
-        ],
->>>>>>> origin/mjbv-oficina
         'atletas' => [
             'class' => 'app\modules\atletas\atletas',
         ],
@@ -123,42 +80,9 @@ $config = [
         'ged' => [
             'class' => 'app\modules\ged\ged',
         ],
-        'prueba' => [
-            'class' => 'app\modules\prueba\prueba',
-<<<<<<< HEAD
-        ],    
         
     ],
     'params' => $params,
-=======
-        ],   
-
-        
-    ],
-    'params' => $params,
-    'as access' => [
-        'class' => 'mdm\admin\components\AccessControl',
-        'allowActions' => [
-            /*'site/logout',
-            'site/index',
-            'site/error',
-            'site/sidebar',
-            'site/contact',
-            'site/about',
-            'site/*',
-            'municipio/get-by-edo',
-            'parroquia/get-by-muni',
-            'admin/user/signup',
-            'admin/user/request-password-reset',
-            'admin/user/reset-password',
-            'ged/*',
-            'atletas/*',
-            'admin/user/*',*/
-
-           '*', // Solo descomentar para hacer prubas del sistema
-        ]
-    ],
->>>>>>> origin/mjbv-oficina
 ];
 
 if (YII_ENV_DEV) {
