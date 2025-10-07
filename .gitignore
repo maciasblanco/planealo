@@ -38,3 +38,9 @@ tests/_support/_generated
 /.env
 /vagrant/config/vagrant-local.yml
 /config/test_db.php
+/config/db_*.php
+/config/db_*.php
+/config/db_saime.php
+/config/db_cne.php
+/config/*.BACKUP
+/web/assets/
