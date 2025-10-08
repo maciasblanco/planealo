@@ -2,10 +2,10 @@
 
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
-
+$isLocal = ($_SERVER['HTTP_HOST'] === 'localhost' || $_SERVER['HTTP_HOST'] === '127.0.0.1');
 $config = [
     'id' => 'GED',
-    'name' => 'Escuela Polideportiva y Cultural San Agustín',
+    'name' => 'Gestin de Escuelas Deportivas',
     'language' => 'es',
     'timeZone' => 'America/Caracas',
     'basePath' => dirname(__DIR__),
@@ -21,6 +21,11 @@ $config = [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'mjbvsistemas-ged-voleibol-06012025',
+            'baseUrl' => $isLocal ? '' : 'https://planealo.sytes.net',
+        ],
+        'urlManager' => [
+            'hostInfo' => $isLocal ? 'http://localhost' : 'https://planealo.sytes.net',
+            'baseUrl' => $isLocal ? '' : 'https://planealo.sytes.net',
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -79,6 +84,9 @@ $config = [
         ],
         'ged' => [
             'class' => 'app\modules\ged\ged',
+        ],
+        'aportes' => [
+            'class' => 'app\modules\aportes\aportes',
         ],
         
     ],
