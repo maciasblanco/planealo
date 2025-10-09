@@ -630,3 +630,36 @@ section {
       margin-bottom: 2rem;
   }
  }
+
+/* Estilos responsivos adicionales  grid view atletas - resgsitrado */
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 768px) {
+    .atletas-registro-index h1 {
+        font-size: 1.5rem;
+    }
+    
+    .table-responsive {
+        border: 1px solid #dee2e6;
+        border-radius: 0.375rem;
+    }
+    
+    .btn {
+        margin-bottom: 5px;
+    }
+}
+
+/* Mejorar la legibilidad en móviles */
+@media (max-width: 576px) {
+    .container {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    
+    .table > :not(caption) > * > * {
+        padding: 0.3rem;
+    }
+}

@@ -37,6 +37,9 @@ use Yii;
  * @property string|null $dir_ip
  * @property string|null $nombreEscuelaClub
  * @property string|null $categoria
+ * 
+ * @property Escuela $escuela
+ * @property Representante $representante
  */
 class AtletasRegistro extends \yii\db\ActiveRecord
 {
@@ -110,5 +113,68 @@ class AtletasRegistro extends \yii\db\ActiveRecord
             'eliminado' => 'Eliminado',
             'dir_ip' => 'Dir Ip',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEscuela()
+    {
+        return $this->hasOne(Escuela::class, ['id' => 'id_escuela']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRepresentante()
+    {
+        return $this->hasOne(RegistroRepresentantes::class, ['id' => 'id_representante']);
+    }
+
+    /**
+     * Convertir a mayúsculas antes de guardar
+     */
+    public function beforeSave($insert)
+    {
+        if (!parent::beforeSave($insert)) {
+            return false;
+        }
+
+        // Lista de campos que deben convertirse a mayúsculas
+        $upperCaseFields = [
+            'p_nombre', 's_nombre', 'p_apellido', 's_apellido',
+            'identificacion', 'talla_franela', 'talla_short',
+            'cell', 'telf', 'dir_ip'
+        ];
+
+        foreach ($upperCaseFields as $field) {
+            if (!empty($this->$field) && is_string($this->$field)) {
+                $this->$field = mb_strtoupper(trim($this->$field), 'UTF-8');
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Invalidar caché después de guardar
+     */
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+        if (class_exists('app\components\AtletasCache')) {
+            \app\components\AtletasCache::invalidateCache();
+        }
+    }
+
+    /**
+     * Invalidar caché después de eliminar
+     */
+    public function afterDelete()
+    {
+        parent::afterDelete();
+        if (class_exists('app\components\AtletasCache')) {
+            \app\components\AtletasCache::invalidateCache();
+        }
     }
 }

@@ -6,24 +6,6 @@ use Yii;
 
 /**
  * This is the model class for table "atletas.registro_reprentantes".
- *
- * @property int $id
- * @property int|null $id_club
- * @property int|null $id_escuela
- * @property string|null $p_nombre
- * @property string|null $s_nombre
- * @property string|null $p_apellido
- * @property string|null $s_apellido
- * @property int|null $id_nac
- * @property int|null $identificacion
- * @property string|null $cell
- * @property string|null $telf
- * @property string|null $d_creacion
- * @property int|null $u_creacion
- * @property string|null $d_update
- * @property int|null $u_update
- * @property bool|null $eliminado
- * @property string|null $dir_ip
  */
 class RegistroRepresentantes extends \yii\db\ActiveRecord
 {
@@ -41,11 +23,11 @@ class RegistroRepresentantes extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_club', 'id_escuela', 'id_nac', 'identificacion', 'u_creacion', 'u_update'], 'default', 'value' => null],
             [['id_club', 'id_escuela', 'id_nac', 'identificacion', 'u_creacion', 'u_update'], 'integer'],
             [['p_nombre', 's_nombre', 'p_apellido', 's_apellido', 'cell', 'telf', 'dir_ip'], 'string'],
             [['d_creacion', 'd_update'], 'safe'],
             [['eliminado'], 'boolean'],
+            [['d_creacion'], 'safe'],
         ];
     }
 
@@ -73,5 +55,34 @@ class RegistroRepresentantes extends \yii\db\ActiveRecord
             'eliminado' => 'Eliminado',
             'dir_ip' => 'Dir Ip',
         ];
+    }
+
+    /**
+     * Convertir a mayúsculas antes de guardar
+     */
+    public function beforeSave($insert)
+    {
+        if (!parent::beforeSave($insert)) {
+            return false;
+        }
+
+        // Lista de campos que deben convertirse a mayúsculas
+        $upperCaseFields = [
+            'p_nombre', 's_nombre', 'p_apellido', 's_apellido',
+            'cell', 'telf', 'dir_ip'
+        ];
+
+        foreach ($upperCaseFields as $field) {
+            if (!empty($this->$field) && is_string($this->$field)) {
+                $this->$field = mb_strtoupper(trim($this->$field), 'UTF-8');
+            }
+        }
+
+        // Convertir identificación a string y luego a mayúsculas si es necesario
+        if (!empty($this->identificacion)) {
+            $this->identificacion = (string)$this->identificacion;
+        }
+
+        return true;
     }
 }

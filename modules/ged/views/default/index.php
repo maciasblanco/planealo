@@ -84,13 +84,12 @@ $this->title = 'Gestión Escuelas Deportivas';
             <?php
                 foreach ($datosEscuelas as $data){ ?>
                 <div class="card col-md-4">
-                    <a href=<?='"'.Yii::getAlias('@web').'/ged?id='.$data['id'].'& nombre='.$data['nombre'].'"'?>><img src=<?='"'.Yii::getAlias('@web').'/img/logos/escuelas/logo'.$data['id'].'.png'.'"'?> class="card-img-top" alt="voleibol"></a>
+                    <a href=<?='"'.Yii::getAlias('@web').'/ged?id='.$data['id'].'&nombre='.$data['nombre'].'"'?>><img src=<?='"'.Yii::getAlias('@web').'/img/logos/escuelas/logo'.$data['id'].'.png'.'"'?> class="card-img-top" alt="voleibol"></a>
                     <div class="card-body">
                         <h5 class="card-title"><?=$data['nombre'] ?></h5>
                         <p class="card-text">Enseñanza de los fundamentos básicos del Voleibol, Basketbol, Futbol, posicionamiento en cancha y tactica de juego para cada deporte </p>
                         <p>
-                        <a href=<?='"'.Yii::getAlias('@web').'?r=atletas/atletas-registro/create&id='.$data['id'].'& nombre='.$data['nombre'].'"'?> class = "btn btn-success">Regitrar Atleta</a>
-                        <!-- <?= Html::a('Regitrar Atleta', ['/atletas/atletas-registro/create&id='.$data['id'].'& nombre='.$data['nombre']], ['class' => 'btn btn-success']) ?>-->
+                        <?= Html::a('Registrar Atleta', ['/atletas/atletas-registro/create', 'id' => $data['id'], 'nombre' => $data['nombre']], ['class' => 'btn btn-success']) ?>
                         </p>
                     </div>
                 </div>

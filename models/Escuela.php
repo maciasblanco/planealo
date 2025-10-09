@@ -75,4 +75,27 @@ class Escuela extends \yii\db\ActiveRecord
             'dir_ip' => 'Dir Ip',
         ];
     }
+
+    /**
+     * Convertir a mayúsculas antes de guardar
+     */
+    public function beforeSave($insert)
+    {
+        if (!parent::beforeSave($insert)) {
+            return false;
+        }
+
+        // Lista de campos que deben convertirse a mayúsculas
+        $upperCaseFields = [
+            'nombre', 'direccion_administrativa', 'direccion_practicas', 'dir_ip'
+        ];
+
+        foreach ($upperCaseFields as $field) {
+            if (!empty($this->$field) && is_string($this->$field)) {
+                $this->$field = mb_strtoupper(trim($this->$field), 'UTF-8');
+            }
+        }
+
+        return true;
+    }
 }
