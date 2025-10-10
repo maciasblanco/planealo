@@ -55,7 +55,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                         ],
                     ],
 
-                    ['label' => 'Aportes_gedmain', 'url' => ['/aportes/aportes/index']],
+                    ['label' => 'Aportes', 'url' => ['/aportes/aportes/index']],
 
                     Yii::$app->user->isGuest
                         ? ['label' => 'Login', 'url' => ['/site/login']]
