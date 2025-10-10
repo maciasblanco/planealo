@@ -132,6 +132,15 @@ class AtletasRegistro extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[AportesSemanales]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAportes()
+    {
+        return $this->hasMany(AportesSemanales::className(), ['atleta_id' => 'id']);
+    }
+    /**
      * Convertir a mayúsculas antes de guardar
      */
     public function beforeSave($insert)

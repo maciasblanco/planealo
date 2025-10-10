@@ -3,7 +3,7 @@
 namespace app\modules\aportes\controllers;
 
 use Yii;
-use app\modules\aportes\models\AportesSemanales;
+use app\models\AportesSemanales;
 use app\modules\aportes\models\AportesSemanalesSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -40,7 +40,7 @@ class AportesController extends Controller
         $searchModel = new AportesSemanalesSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        // Estadísticas MEJORADAS
+        // Estadísticas CORREGIDAS
         $totalRecaudado = AportesSemanales::find()
             ->where(['estado' => 'pagado'])
             ->sum('monto') ?? 0;
@@ -49,20 +49,17 @@ class AportesController extends Controller
             ->where(['estado' => 'pendiente'])
             ->count();
 
-        // NUEVO: Deuda total pendiente
+        // CORREGIDO: Deuda total pendiente
         $deudaTotal = AportesSemanales::find()
             ->where(['estado' => 'pendiente'])
             ->sum('monto') ?? 0;
 
-        // NUEVO: Atletas con deuda
-        $atletasConDeuda = AtletasRegistro::find()
-            ->select(['atletas_registro.*', 
-                'deuda' => 'SUM(CASE WHEN aportes_semanales.estado = "pendiente" THEN aportes_semanales.monto ELSE 0 END)'
-            ])
-            ->joinWith('aportes')
-            ->groupBy('atletas_registro.id')
-            ->having('deuda > 0')
-            ->count();
+        // CORREGIDO: Atletas con deuda - usando consulta directa
+        $atletasConDeuda = Yii::$app->db->createCommand("
+            SELECT COUNT(DISTINCT atleta_id) 
+            FROM contabilidad.aportes_semanales 
+            WHERE estado = 'pendiente'
+        ")->queryScalar();
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -165,21 +162,20 @@ class AportesController extends Controller
     }
 
     /**
-     * NUEVA ACCIÓN: Reporte de deudas por escuela
+     * NUEVA ACCIÓN: Reporte de deudas por escuela - CORREGIDO
      */
     public function actionDeudasEscuelas()
     {
-        $deudasPorEscuela = Escuela::find()
-            ->select([
-                'escuela.nombre',
-                'total_deuda' => 'SUM(CASE WHEN aportes_semanales.estado = "pendiente" THEN aportes_semanales.monto ELSE 0 END)',
-                'atletas_deudores' => 'COUNT(DISTINCT CASE WHEN aportes_semanales.estado = "pendiente" THEN aportes_semanales.atleta_id END)'
-            ])
-            ->joinWith('aportes')
-            ->groupBy('escuela.id, escuela.nombre')
-            ->having('total_deuda > 0')
-            ->asArray()
-            ->all();
+        $deudasPorEscuela = Yii::$app->db->createCommand("
+            SELECT 
+                e.nombre,
+                SUM(CASE WHEN a.estado = 'pendiente' THEN a.monto ELSE 0 END) as total_deuda,
+                COUNT(DISTINCT CASE WHEN a.estado = 'pendiente' THEN a.atleta_id END) as atletas_deudores
+            FROM atletas.escuela e  -- CORREGIDO: agregado esquema atletas.
+            LEFT JOIN contabilidad.aportes_semanales a ON a.escuela_id = e.id
+            GROUP BY e.id, e.nombre
+            HAVING SUM(CASE WHEN a.estado = 'pendiente' THEN a.monto ELSE 0 END) > 0
+        ")->queryAll();
 
         return $this->render('deudas-escuelas', [
             'deudasPorEscuela' => $deudasPorEscuela,
@@ -187,23 +183,23 @@ class AportesController extends Controller
     }
 
     /**
-     * NUEVA ACCIÓN: Reporte de atletas morosos
+     * NUEVA ACCIÓN: Reporte de atletas morosos - CORREGIDO
      */
     public function actionAtletasMorosos()
     {
-        $atletasMorosos = AtletasRegistro::find()
-            ->select([
-                'atletas_registro.*',
-                'escuela.nombre as escuela_nombre',
-                'total_deuda' => 'SUM(CASE WHEN aportes_semanales.estado = "pendiente" THEN aportes_semanales.monto ELSE 0 END)',
-                'semanas_deuda' => 'COUNT(CASE WHEN aportes_semanales.estado = "pendiente" THEN 1 END)'
-            ])
-            ->joinWith(['escuela', 'aportes'])
-            ->groupBy('atletas_registro.id, atletas_registro.nombre_completo, escuela.nombre')
-            ->having('total_deuda > 0')
-            ->orderBy('total_deuda DESC')
-            ->asArray()
-            ->all();
+        $atletasMorosos = Yii::$app->db->createCommand("
+            SELECT 
+                ar.p_nombre || ' ' || ar.p_apellido as nombre_completo,
+                e.nombre as escuela_nombre,
+                SUM(CASE WHEN a.estado = 'pendiente' THEN a.monto ELSE 0 END) as total_deuda,
+                COUNT(CASE WHEN a.estado = 'pendiente' THEN 1 END) as semanas_deuda
+            FROM atletas.registro ar
+            LEFT JOIN atletas.escuela e ON e.id = ar.id_escuela  -- CORREGIDO: agregado esquema atletas.
+            LEFT JOIN contabilidad.aportes_semanales a ON a.atleta_id = ar.id
+            GROUP BY ar.id, ar.p_nombre, ar.p_apellido, ar.s_nombre, ar.s_apellido, e.nombre
+            HAVING SUM(CASE WHEN a.estado = 'pendiente' THEN a.monto ELSE 0 END) > 0
+            ORDER BY total_deuda DESC
+        ")->queryAll();
 
         return $this->render('atletas-morosos', [
             'atletasMorosos' => $atletasMorosos,
@@ -240,7 +236,7 @@ class AportesController extends Controller
                     $atleta = AtletasRegistro::findOne($atletaId);
                     $aporte = new AportesSemanales();
                     $aporte->atleta_id = $atletaId;
-                    $aporte->escuela_id = $atleta->escuela_id;
+                    $aporte->escuela_id = $atleta->id_escuela;
                     $aporte->fecha_viernes = $fecha_viernes;
                     $aporte->numero_semana = AportesSemanales::getNumeroSemana($fecha_viernes);
                     $aporte->monto = $monto;
@@ -250,6 +246,7 @@ class AportesController extends Controller
                         $count++;
                     } else {
                         $errors++;
+                        Yii::error('Error al guardar aporte: ' . json_encode($aporte->errors));
                     }
                 }
             }
@@ -293,4 +290,94 @@ class AportesController extends Controller
 
         return $this->redirect(['index']);
     }
+
+/**
+ * Genera reporte general de aportes
+ */
+public function actionReporte()
+{
+    // Obtener parámetros de filtro
+    $fechaInicio = Yii::$app->request->get('fecha_inicio', date('Y-m-01')); // Primer día del mes
+    $fechaFin = Yii::$app->request->get('fecha_fin', date('Y-m-t')); // Último día del mes
+    
+    // Estadísticas generales
+    $totalRecaudado = AportesSemanales::find()
+        ->where(['estado' => 'pagado'])
+        ->andWhere(['between', 'fecha_viernes', $fechaInicio, $fechaFin])
+        ->sum('monto') ?? 0;
+
+    $totalPendiente = AportesSemanales::find()
+        ->where(['estado' => 'pendiente'])
+        ->andWhere(['between', 'fecha_viernes', $fechaInicio, $fechaFin])
+        ->sum('monto') ?? 0;
+
+    $totalCancelado = AportesSemanales::find()
+        ->where(['estado' => 'cancelado'])
+        ->andWhere(['between', 'fecha_viernes', $fechaInicio, $fechaFin])
+        ->sum('monto') ?? 0;
+
+    // Conteos por estado
+    $countPagados = AportesSemanales::find()
+        ->where(['estado' => 'pagado'])
+        ->andWhere(['between', 'fecha_viernes', $fechaInicio, $fechaFin])
+        ->count();
+
+    $countPendientes = AportesSemanales::find()
+        ->where(['estado' => 'pendiente'])
+        ->andWhere(['between', 'fecha_viernes', $fechaInicio, $fechaFin])
+        ->count();
+
+    $countCancelados = AportesSemanales::find()
+        ->where(['estado' => 'cancelado'])
+        ->andWhere(['between', 'fecha_viernes', $fechaInicio, $fechaFin])
+        ->count();
+
+    // Top 5 escuelas con más recaudación
+    $topEscuelas = Yii::$app->db->createCommand("
+        SELECT 
+            e.nombre as escuela_nombre,
+            COUNT(a.id) as total_aportes,
+            SUM(CASE WHEN a.estado = 'pagado' THEN a.monto ELSE 0 END) as total_recaudado,
+            SUM(CASE WHEN a.estado = 'pendiente' THEN a.monto ELSE 0 END) as total_pendiente
+        FROM atletas.escuela e
+        LEFT JOIN contabilidad.aportes_semanales a ON a.escuela_id = e.id 
+            AND a.fecha_viernes BETWEEN :fechaInicio AND :fechaFin
+        GROUP BY e.id, e.nombre
+        ORDER BY total_recaudado DESC
+        LIMIT 5
+    ", [':fechaInicio' => $fechaInicio, ':fechaFin' => $fechaFin])->queryAll();
+
+    // Evolución mensual (últimos 6 meses)
+    $evolucionMensual = Yii::$app->db->createCommand("
+        SELECT 
+            TO_CHAR(fecha_viernes, 'YYYY-MM') as mes,
+            COUNT(*) as total_aportes,
+            SUM(CASE WHEN estado = 'pagado' THEN monto ELSE 0 END) as recaudado,
+            SUM(CASE WHEN estado = 'pendiente' THEN monto ELSE 0 END) as pendiente
+        FROM contabilidad.aportes_semanales
+        WHERE fecha_viernes >= DATE_TRUNC('month', CURRENT_DATE - INTERVAL '5 months')
+        GROUP BY TO_CHAR(fecha_viernes, 'YYYY-MM')
+        ORDER BY mes ASC
+    ")->queryAll();
+
+    return $this->render('reporte', [
+        'fechaInicio' => $fechaInicio,
+        'fechaFin' => $fechaFin,
+        'totalRecaudado' => $totalRecaudado,
+        'totalPendiente' => $totalPendiente,
+        'totalCancelado' => $totalCancelado,
+        'countPagados' => $countPagados,
+        'countPendientes' => $countPendientes,
+        'countCancelados' => $countCancelados,
+        'topEscuelas' => $topEscuelas,
+        'evolucionMensual' => $evolucionMensual,
+    ]);
+}
+
+
+
+
+
+
+
 }

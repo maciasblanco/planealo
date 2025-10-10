@@ -11,7 +11,9 @@ use yii\bootstrap5\Nav;
 use yii\bootstrap5\NavBar;
 
 AppAsset::register($this);
-
+//Select2 configuration
+\app\assets\Select2BootstrapAsset::register($this);
+\app\assets\Select2LoadAsset::register($this);
 $this->registerCsrfMetaTags();
 $this->registerMetaTag(['charset' => Yii::$app->charset], 'charset');
 $this->registerMetaTag(['name' => 'viewport', 'content' => 'width=device-width, initial-scale=1, shrink-to-fit=no']);
@@ -19,6 +21,7 @@ $this->registerMetaTag(['name' => 'description', 'content' => $this->params['met
 $this->registerMetaTag(['name' => 'keywords', 'content' => $this->params['meta_keywords'] ?? '']);
 $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii::getAlias('@web/favicon.ico')]);
 ?>
+
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>" class="h-100">
@@ -27,49 +30,57 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     <?php $this->head() ?>
 </head>
 <body class="d-flex flex-column h-100">
+
+
 <?php $this->beginBody() ?>
-
 <header id="header">
+    <!--Seleccionar Imagen del  y fondos del Banner de cada escuela-->
+
     <?php
-        NavBar::begin
-            ([
-                'brandLabel' => '<img src='.Yii::getAlias("@web").'/img/logos/logoGed.png class="d-block img-logo" alt="...">',
-                'brandUrl' => Yii::$app->homeUrl,
-                'options' => ['class' => 'navbar navbar-expand-lg navbar-dark bg-dark']
-            ]);
-            echo Nav::widget([
-                'encodeLabels' => true, //Permite el uso de  html in Etiquetas
-                'options' => ['class' => 'navbar-nav'],
+        /*Selecciono el valor de la escuela por el metodo get*/
+        $codeEscuela=(int)$_GET['id'];
+        $codeNombreEscuela=$_GET['nombre'];
+        //die(var_dump($codeEscuela));
+        $dirLogo='/img/logos/escuelas/logo'.$codeEscuela.'.png class="d-block img-logo" alt="...">';
+    NavBar::begin([
+        'brandLabel' => '<img src='.Yii::getAlias("@web").$dirLogo,
+        'brandUrl' => Yii::$app->homeUrl,
+        'options' => ['class' => 'navbar-expand-md navbar-dark bg-dark fixed-top']
+    ]);
+    ?>
+    <?php 
+        echo Nav::widget([
+            'options' => ['class' => 'navbar-nav scrollto'],
+            'items' => [
+                ['label' => 'Inicio', 'url' => ['/site/index']],
+                ['label' => 'Registros',
                 'items' => [
-                    ['label' => 'inicio', 'url' => ['/site/index']],
-                    ['label' => 'Registros',
+                        //['label' => 'Escuela', 'url' => ['/escuela_club/escuela-registro/create']],
+                        //['label' => 'Club', 'url' => ['/escuela_club/escuela-registro/create']],
+                        ['label' => 'Atletas', 'url' => ['/atletas/atletas-registro/index?id='.$codeEscuela.'& nombre='.$codeNombreEscuela]],
+                    ],
+                ],
+                ['label' => 'G.E.D',
                     'items' => [
-                            ['label' => 'Escuela', 'url' => ['/escuela_club/escuela-registro/create']],
-                        ],
+                        ['label' => 'Escuelas Registradas', 'url' => ['/#escuelas']],
+                        ['label' => 'Acerca de...', 'url' => ['/#Acerca_de']],
+                        ['label' => 'Contact', 'url' => ['/site/contact']],
                     ],
-                    ['label' => 'G.E.D',
-                        'items' => [
-                            ['label' => 'Escuelas Registradas', 'url' => ['/#escuelas']],
-                            ['label' => 'Acerca de...', 'url' => ['/#Acerca_de']],
-                            ['label' => 'Contact', 'url' => ['/site/contact']],
-                        ],
-                    ],
+                ],
 
-                    ['label' => 'Aportes_gedmain', 'url' => ['/aportes/aportes/index']],
-
-                    Yii::$app->user->isGuest
-                        ? ['label' => 'Login', 'url' => ['/site/login']]
-                        : '<li class="nav-item">'
-                            . Html::beginForm(['/site/logout'])
-                            . Html::submitButton(
-                                'Logout (' . Yii::$app->user->identity->username . ')',
-                                ['class' => 'nav-link btn btn-link logout']
-                            )
-                            . Html::endForm()
-                            . '</li>'
-                ]
-            ]);
-        ?> <!--Parada temporal del PHP para introducir codigo html-->
+                Yii::$app->user->isGuest
+                    ? ['label' => 'Login', 'url' => ['/site/login']]
+                    : '<li class="nav-item">'
+                        . Html::beginForm(['/site/logout'])
+                        . Html::submitButton(
+                            'Logout (' . Yii::$app->user->identity->username . ')',
+                            ['class' => 'nav-link btn btn-link logout']
+                        )
+                        . Html::endForm()
+                        . '</li>'
+            ]
+        ]);
+        ?>
         <form class='navbar-form navbar-right' role='search'>
             <div  class="panel-redes-sociales">
                 <div id="icons-redes-sociales"class="social-links">
@@ -85,6 +96,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             echo "," ;
         ?>
         <form class='navbar-form navbar-right' role='search'>
+            
             <div  class="panel-Noticias">
                 <h1>Noticias</h1> 
                 <div id="carrusel-nav" class="col-md-10">
@@ -129,25 +141,23 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                 </div>    
             </div>
         </form>
-        <?php 
-            echo "," ;
-        ?>
-        <?php 
+    <?php 
+        echo "," ;  
         NavBar::end();
     ?>
 </header>
 
-<main id="main" class="flex-shrink-0" role="main">
+<main id="main" class="flex-shrink-0 mt-5 margen-main" role="main">
     <div class="container">
         <?php if (!empty($this->params['breadcrumbs'])): ?>
             <?= Breadcrumbs::widget(['links' => $this->params['breadcrumbs']]) ?>
         <?php endif ?>
         <?= Alert::widget() ?>
         <?= $content ?>
-        
+        <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
     </div>
 </main>
-<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
 <footer id="footer" class="mt-auto py-3 bg-light">
     <div class="container">
         <div class="row text-muted">
@@ -156,6 +166,18 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         </div>
     </div>
 </footer>
+
+<?php
+    $this->registerJs(<<<JAVASCRIPT
+        $(document).ready(function(){
+            let divCarousel=querySelector('#carrusel-nav');
+            $('#carouselNav').carousel({
+            interval: 4000
+            });
+        });
+    JAVASCRIPT
+    );
+?>
 
 <?php $this->endBody() ?>
 </body>
